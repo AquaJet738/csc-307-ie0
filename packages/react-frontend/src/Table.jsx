@@ -31,9 +31,6 @@ function TableBody(props) {
   return (
       <tbody>
         {rows}
-		<tr>
-		<td> <button> Add </button> </td>
-		</tr>
        </tbody>
    );
 }
