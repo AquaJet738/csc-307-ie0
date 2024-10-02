@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Table from "./Table";
+import Form from "./Form";
 
 function MyApp() {
   const [characters, setCharacters] = useState([
-    {
+    /*
+	{
     name: "Charlie",
     job: "Janitor"
     },
@@ -19,6 +21,7 @@ function MyApp() {
       name: "Dennis",
       job: "Bartender"
     }
+	*/
     ]);
 	
   function removeOneCharacter(index) {
@@ -31,10 +34,11 @@ function MyApp() {
   return (
     <div className="container">
       <Table
-        characterData={characters}
-        removeCharacter={removeOneCharacter}
+		characterData={characters}
+		removeCharacter={removeOneCharacter}
       />
-    </div>
+      <Form />
+	</div>
   );
 }
 
