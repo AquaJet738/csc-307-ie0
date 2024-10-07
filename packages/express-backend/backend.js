@@ -44,6 +44,22 @@ const findUserByName = (name) => {
   );
 };
 
+const findUserById = (id) =>
+  users["users_list"].find((user) => user["id"] === id);
+ 
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+// get all users
+app.get("/users", (req, res) => {
+  res.send(users);
+});
+
+// get users by name
 app.get("/users", (req, res) => {
   const name = req.query.name;
   if (name != undefined) {
@@ -55,14 +71,15 @@ app.get("/users", (req, res) => {
   }
 });
 
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.get("/users", (req, res) => {
-  res.send(users);
+// get users by ID
+app.get("/users/:id", (req, res) => {
+  const id = req.params["id"]; //or req.params.id
+  let result = findUserById(id);
+  if (result === undefined) {
+    res.status(404).send("Resource not found.");
+  } else {
+    res.send(result);
+  }
 });
 
 app.listen(port, () => {
