@@ -51,6 +51,10 @@ const addUser = (user) => {
   users["users_list"].push(user);
   return user;
 };
+
+const deleteUser = (id) => {
+	users["users_list"].filter((user) => user["id"] === id);
+};
  
 
 app.use(express.json());
@@ -93,6 +97,15 @@ app.post("/users", (req, res) => {
   addUser(userToAdd);
   res.send();
 });
+
+// DELETE request code
+app.delete("/users/:id", (req, res) => {
+	const id = req.params["id"];
+	let result = findUserById(id);
+	deleteUser(result);
+	res.send();
+});
+
 
 app.listen(port, () => {
   console.log(
