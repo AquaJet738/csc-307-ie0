@@ -8,7 +8,7 @@ function Form(props) {
   
   function submitForm() {
     props.handleSubmit(person);
-    setPerson({ name: "", job: "" });
+    setPerson({name: "", job: "" });
   }
   
   function handleChange(event) {
