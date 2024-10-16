@@ -14,8 +14,8 @@ function Form(props) {
   function handleChange(event) {
 	const { name, value } = event.target;
 	if (name === "job")
-	  setPerson({ name: person["name"], job: value });
-	else setPerson({ name: value, job: person["job"] });
+	  setPerson({id: Math.floor(Math.random() * 1000).toString(), name: person["name"], job: value });
+	else setPerson({id: Math.floor(Math.random() * 1000).toString(), name: value, job: person["job"] });
   }
   
   return (
