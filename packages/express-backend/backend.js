@@ -102,7 +102,7 @@ app.get("/users/:id", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
-  res.sendStatus(201);
+  res.status(201).send(userToAdd);
 });
 
 // DELETE request code
