@@ -1,5 +1,19 @@
 import express from "express";
 import cors from "cors";
+import UserService from "./services/user-service.js";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+
+
+dotenv.config();
+
+const { MONGO_CONNECTION_STRING } = process.env;
+
+mongoose.set("debug", true);
+mongoose
+  .connect(MONGO_CONNECTION_STRING)
+  .catch((error) => console.log(error));
+
 
 const app = express();
 const port = 8000;
@@ -67,15 +81,22 @@ app.get("/", (req, res) => {
 
 // get all users
 app.get("/users", (req, res) => {
-  res.send(users);
+	const name = req.query.name;
+	const job = req.query.job;
+	UserService.getUsers(name, job).then(req.send(users)).catch((error) => {console.log(error)});
 });
 
 // get users by name (and job)
 app.get("/users", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
+  
+  UserService.findUserByName(name).then(UserService.findUserByJob(job).then((result) => {
+	  res.send(result)})
+  ).catch((error) => {console.log(error)});
+  
   if (name != undefined) {
-    let result = findUserByName(name);
+    let promise = UserService.findUserByName(name);
 	if (job != undefined) {
 		result = result.filter((user) => user["job"] === job);
 	}
@@ -90,19 +111,21 @@ app.get("/users", (req, res) => {
 // get users by ID
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
-  let result = findUserById(id);
-  if (result === undefined) {
-    res.status(404).send("Resource not found.");
-  } else {
-    res.send(result);
-  }
+  let promise = UserService.findUserById(id).then( {
+	if (result === undefined) {
+      res.status(404).send("Resource not found.");
+	} else {
+      res.send(result);
+	}
+  }).catch((error) => {console.log(error)});
 });
 
 // POST request code
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.status(201).send(userToAdd);
+  let promise = UserService.addUser(userToAdd)
+	.then(res.status(201).send(userToAdd))
+	.catch((error) => {console.log(error)});
 });
 
 // DELETE request code
